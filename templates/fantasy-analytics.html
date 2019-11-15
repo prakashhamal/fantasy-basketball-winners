@@ -1,0 +1,70 @@
+<style type="text/css">
+table {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+table, th, td {
+  border: 1px solid black;
+  padding: 1px 2px;
+  font-size: 12px;
+}
+table, thead, th{
+    text-align:center;
+}
+</style>
+<script type="text/javascript">
+    function changeWeek(){
+        var e = document.getElementById("weekselect");
+        var week = e.options[e.selectedIndex].value;
+        window.location.href = "/fbb/"+week;
+    }
+</script>
+
+<form action="/fbb">
+  <select id="weekselect"  onchange="changeWeek()">
+    <option value="">Select week</option>
+    {% for week in data.weeks %}
+    <option value="{{week}}" {% if data.current_week  == week %} selected="selected" {% endif %}>Week {{week}}</option>
+    {% endfor %}
+  </select>
+</form>
+
+<h3>
+Week : {{data.current_week}}
+</h3>
+
+<div style="margin-top:10px;width:100%;">
+    <b>Full Stats</b>
+    {{data.full_stats | safe}}
+</div>
+
+<div style="margin-top:10px;width:100%;">
+    <b>Matchup Winners</b>
+    {{data.matchup_winners | safe}}
+</div>
+
+<div style="margin-top:10px;width:30%;">
+    <b>Category Winners</b>
+    {{data.category_winners | safe}}
+</div>
+
+<div style="margin-top:10px;width:30%;">
+    <b>Win Counts</b>
+    {{data.win_counts | safe}}
+</div>
+{% if data.tiebreak %}
+<div style="margin-top:10px;width:30%;">
+    <b>Head-to-head between the tied teams</b>
+    <div>
+        {{data.tiebreak_headtohead_matchup | safe}}
+    </div>
+    <div style="margin-top:10px;">
+        {{data.tiebreak_headtohead_wins | safe}}
+    </div>
+</div>
+ {% endif %}
+
+<div style="font-weight:bold;font-size:20px; margin-top:20px;">
+    WINNER : {{data.winner}}
+</div>
