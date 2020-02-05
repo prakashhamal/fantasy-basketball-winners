@@ -9,7 +9,7 @@ from flask import current_app as app
 class FantasyAnalyticsService():
     categories = ["FG%", "FT%", "REB", "AST", "STL", "BLK", "TO", "PTS","3PM"]
     categoriesAvg = ["REB_avg", "AST_avg", "STL_avg", "BLK_avg", "TO_avg", "PTS_avg","3PM_avg"]
-    RESOURCE_FOLDER = '/Users/phamal/data/fantasy-basketball/'
+    RESOURCE_FOLDER = '/Users/prakash.hamal/code/fantasy-basketball-winners/resources/'
 
     def __init__(self):
         print("init")
@@ -156,7 +156,8 @@ class FantasyAnalyticsService():
 
         scoreboardDF = pd.DataFrame(teamDicts)
         gamesPlayedDF = pd.read_csv('{0}/games-played.csv'.format(self.RESOURCE_FOLDER))
-
+        for teamDict in teamDicts:
+            print(teamDict['id']+" "+teamDict["team"])
         scoreboardDF.id = scoreboardDF.id.astype(str)
         gamesPlayedDF.id = gamesPlayedDF.id.astype(str)
         statsDF = pd.merge(scoreboardDF, gamesPlayedDF, on='id')
@@ -166,5 +167,3 @@ class FantasyAnalyticsService():
              'week_' + str(week)]]
         statsDF = statsDF.rename(columns={'week_' + str(week): 'games_played'})
         return statsDF
-
-
