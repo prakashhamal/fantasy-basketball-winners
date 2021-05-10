@@ -127,20 +127,20 @@ class FantasyAnalyticsService():
             index = index + 1
             teamDicts.append(teamDict)
 
-        statRows = soup.find_all('tr', {"class": "Table2__tr"})
+        statRows = soup.find_all('tr', {"class": "Table__TR"})
         categories = []
         stats = []
         for statRow in statRows:
             teamStats = []
             if len(categories) == 0:
-                catCells = statRow.find_all('th', {"class": "Table2__th"})
+                catCells = statRow.find_all('th', {"class": "Table__TH"})
                 first = True
                 for catCell in catCells:
                     if first == False:
                         categories.append(catCell.text)
                     else:
                         first = False;
-            statCells = statRow.find_all('td', {"class": "Table2__td"})
+            statCells = statRow.find_all('td', {"class": "Table__TD"})
             if len(statCells) != 0:
                 first = True
                 for statCell in statCells:
@@ -153,6 +153,7 @@ class FantasyAnalyticsService():
         for index, teamDict in enumerate(teamDicts):
             for idx, cat in enumerate(categories):
                 teamDict[cat] = stats[index][idx]
+                print(teamDict[cat])
 
         scoreboardDF = pd.DataFrame(teamDicts)
         gamesPlayedDF = pd.read_csv('{0}/games-played.csv'.format(self.RESOURCE_FOLDER))
@@ -166,4 +167,5 @@ class FantasyAnalyticsService():
             ['team', 'id', 'week', 'record', 'win/loss', 'FG%', 'FT%', '3PM', 'REB', 'AST', 'STL', 'BLK', 'TO', 'PTS',
              'week_' + str(week)]]
         statsDF = statsDF.rename(columns={'week_' + str(week): 'games_played'})
+        print(statsDF)
         return statsDF
